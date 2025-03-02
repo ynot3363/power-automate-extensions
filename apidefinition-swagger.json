@@ -1,0 +1,396 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Azure Functions API",
+    "version": "1.0.1",
+    "description": "This API exposes several Azure Functions endpoints that help enhance your ability to manipulate data within Power Automate."
+  },
+  "host": "your-function-app.azurewebsites.net",
+  "basePath": "/api",
+  "schemes": ["https"],
+  "paths": {
+    "/createMapFromArray": {
+      "post": {
+        "operationId": "CreateMapFromArray",
+        "summary": "Create map from array",
+        "description": "Creates a map from an array of objects, where each object has a 'key' and 'value' property. The 'key' property is used as the key in the map, and the 'value' property is used as the value in the map.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "array": {
+                  "x-ms-summary": "Array of Objects",
+                  "description": "The array of objects.",
+                  "x-ms-visibility": "important",
+                  "type": "array",
+                  "items": {}
+                },
+                "property": {
+                  "x-ms-summary": "Property",
+                  "description": "The property name within each object that will be used as the value in the map. Use a '.' to access a nested property.",
+                  "x-ms-visibility": "important",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Map result",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "object",
+                  "description": "An object where each key is a unique value from the specified property in the input array, and each value is an array of objects that had that key value.",
+                  "additionalProperties": { "type": "object" }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "An error message explaining why the request failed."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/diffArrays": {
+      "post": {
+        "operationId": "DiffArrays",
+        "summary": "Diff two arrays",
+        "description": "Compares two arrays provided in the request body ('array1' and 'array2') and returns the differences.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "array1": {
+                  "x-ms-summary": "Array 1",
+                  "description": "The first array to compare.",
+                  "x-ms-visibility": "important",
+                  "type": "array",
+                  "items": {}
+                },
+                "array2": {
+                  "x-ms-summary": "Array 2",
+                  "description": "The second array to compare.",
+                  "x-ms-visibility": "important",
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Difference result",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "object",
+                  "description": "An object containing the differences between the two arrays.",
+                  "properties": {
+                    "onlyInFirst": {
+                      "type": "array",
+                      "description": "Items that are only present in the first array.",
+                      "items": {}
+                    },
+                    "onlyInSecond": {
+                      "type": "array",
+                      "description": "Items that are only present in the second array.",
+                      "items": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "An error message explaining why the request failed."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/extractFilesFromZip": {
+      "post": {
+        "operationId": "ExtractZipFiles",
+        "summary": "Extract files from a ZIP file",
+        "description": "Extracts files from a ZIP file provided as a Base64-encoded string in the request body.",
+        "consumes": ["text/plain"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "File contents",
+            "x-ms-summary": "File contents",
+            "description": "A Base64-encoded string representing the contents of a ZIP file.",
+            "required": true,
+            "x-ms-visibility": "important",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Files extracted successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "array",
+                  "description": "An array of file objects extracted from the ZIP file.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "fileName": {
+                        "type": "string",
+                        "description": "The name of the extracted file."
+                      },
+                      "content": {
+                        "type": "object",
+                        "description": "The content of the file, including its MIME type and Base64-encoded data."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "An error message explaining why the request failed."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "An error message indicating a problem processing the ZIP file."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/flattenArray": {
+      "post": {
+        "operationId": "FlattenArray",
+        "summary": "Flatten an array",
+        "description": "Flattens a nested array.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "array": {
+                  "x-ms-summary": "Nested Array",
+                  "description": "The nested array that you want to flatten. This can be a multi-dimensional array containing any type of values.",
+                  "x-ms-visibility": "important",
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flattened array result",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "array",
+                  "description": "The flattened array result.",
+                  "items": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "An error message explaining why the request failed."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/groupArrayBy": {
+      "post": {
+        "operationId": "GroupArrayBy",
+        "summary": "Group an array by key",
+        "description": "Groups the items of an array by a specified key.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "array": {
+                  "x-ms-summary": "Array of Objects",
+                  "description": "The array of objects that you want to group.",
+                  "x-ms-visibility": "important",
+                  "type": "array",
+                  "items": {}
+                },
+                "key": {
+                  "x-ms-summary": "Key Property",
+                  "description": "The property name within each object that will be used to group the array items.",
+                  "x-ms-visibility": "important",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Grouped result",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "object",
+                  "description": "An object where each key is a group value and each value is an array of items belonging to that group.",
+                  "additionalProperties": { "type": "array", "items": {} }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "An error message explaining why the request failed."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sortArray": {
+      "post": {
+        "operationId": "SortArray",
+        "summary": "Sort an array",
+        "description": "Sorts an array provided in the request body. An optional sortMode property may be provided to determine the sorting algorithm.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "array": {
+                  "x-ms-summary": "Array",
+                  "description": "The array that you want to sort.",
+                  "x-ms-visibility": "important",
+                  "type": "array",
+                  "items": {}
+                },
+                "sortMode": {
+                  "x-ms-summary": "Sort Mode",
+                  "description": "Optional. The sorting mode. Use 'numeric' for number sorting, 'lex' for lexicographical (alphabetical) sorting, or 'date' for date sorting.",
+                  "x-ms-visibility": "advanced",
+                  "type": "string",
+                  "enum": ["numeric", "lex", "date"]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sorted array result",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "array",
+                  "description": "The sorted array result.",
+                  "items": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "An error message explaining why the request failed."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
