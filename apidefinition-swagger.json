@@ -108,24 +108,7 @@
             "description": "Difference result",
             "schema": {
               "type": "object",
-              "properties": {
-                "value": {
-                  "type": "object",
-                  "description": "An object containing the differences between the two arrays.",
-                  "properties": {
-                    "onlyInFirst": {
-                      "type": "array",
-                      "description": "Items that are only present in the first array.",
-                      "items": {}
-                    },
-                    "onlyInSecond": {
-                      "type": "array",
-                      "description": "Items that are only present in the second array.",
-                      "items": {}
-                    }
-                  }
-                }
-              }
+              "additionalProperties": true
             }
           },
           "400": {
@@ -228,15 +211,7 @@
             "required": true,
             "schema": {
               "type": "object",
-              "properties": {
-                "array": {
-                  "x-ms-summary": "Nested Array",
-                  "description": "The nested array that you want to flatten. This can be a multi-dimensional array containing any type of values.",
-                  "x-ms-visibility": "important",
-                  "type": "array",
-                  "items": {}
-                }
-              }
+              "additionalProperties": true
             }
           }
         ],
@@ -306,13 +281,7 @@
             "description": "Grouped result",
             "schema": {
               "type": "object",
-              "properties": {
-                "value": {
-                  "type": "object",
-                  "description": "An object where each key is a group value and each value is an array of items belonging to that group.",
-                  "additionalProperties": { "type": "array", "items": {} }
-                }
-              }
+              "additionalProperties": true
             }
           },
           "400": {
@@ -368,13 +337,7 @@
             "description": "Sorted array result",
             "schema": {
               "type": "object",
-              "properties": {
-                "value": {
-                  "type": "array",
-                  "description": "The sorted array result.",
-                  "items": {}
-                }
-              }
+              "additionalProperties": true
             }
           },
           "400": {
