@@ -16,8 +16,23 @@ function isEqual(a: any, b: any): boolean {
   // If types differ, they aren't equal.
   if (typeof a !== typeof b) return false;
 
-  // Handle null (typeof null is "object")
-  if (a === null || b === null) return false;
+  // Handle null, undefined, and NaN values, these are not treated as equal, no null !== undefine or NaN.
+  if (
+    (a === null && b === null) ||
+    (a === undefined && b === undefined) ||
+    (Number.isNaN(a) && Number.isNaN(b))
+  )
+    return true;
+
+  if (
+    a === null ||
+    b === null ||
+    a === undefined ||
+    b === undefined ||
+    Number.isNaN(a) ||
+    Number.isNaN(b)
+  )
+    return false;
 
   // Compare arrays
   if (Array.isArray(a) && Array.isArray(b)) {
