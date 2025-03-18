@@ -2,13 +2,69 @@
   "swagger": "2.0",
   "info": {
     "title": "Azure Functions API",
-    "version": "1.0.1",
+    "version": "1.1.1",
     "description": "This API exposes several Azure Functions endpoints that help enhance your ability to manipulate data within Power Automate."
   },
   "host": "your-function-app.azurewebsites.net",
   "basePath": "/api",
   "schemes": ["https"],
   "paths": {
+    "/compareObjects": {
+      "post": {
+        "operationId": "CompareObjects",
+        "summary": "Compares two objects and returns the differences.",
+        "description": "Compares two objects provided in the request body ('object1' and 'object2') and returns the differences.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "obj1": {
+                  "x-ms-summary": "First Object",
+                  "description": "First object to compare",
+                  "x-ms-visibility": "important",
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "obj2": {
+                  "x-ms-summary": "Second Object",
+                  "description": "Second object to compare",
+                  "x-ms-visibility": "important",
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Difference result",
+            "schema": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "An error message explaining why the request failed."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/createMapFromArray": {
       "post": {
         "operationId": "CreateMapFromArray",
@@ -220,13 +276,7 @@
             "description": "Flattened array result",
             "schema": {
               "type": "object",
-              "properties": {
-                "value": {
-                  "type": "array",
-                  "description": "The flattened array result.",
-                  "items": {}
-                }
-              }
+              "additionalProperties": true
             }
           },
           "400": {

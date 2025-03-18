@@ -4,6 +4,7 @@ This repository contains a collection of Azure Functions designed to extend the 
 
 ## Features
 
+- compareObjects: Compares two objects and returns any differences between them.
 - createMapFromArray: Creates a map (key/value pair object) from an array of objects based on a specified nested property.
 - diffArrays: Compares two arrays and returns items unique to each.
 - extractZipFiles: Extracts files from a Base64-encoded ZIP file and returns each file’s name, content type, and content.
